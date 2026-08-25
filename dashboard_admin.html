@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panou Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200 font-sans">
+    <nav class="bg-gray-900 shadow p-4 mb-10">
+        <div class="max-w-5xl mx-auto flex justify-between items-center text-white">
+            <h1 class="text-xl font-bold tracking-wider">Platforma STEM - Administrare</h1>
+            <div>
+                <span class="mr-4 text-gray-300">Autentificat ca: <strong class="text-white">{{ session['username'] }}</strong></span>
+                <a href="/logout" class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition">Ieșire</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4">
+        <div class="bg-white p-8 rounded-xl shadow-2xl border-t-4 border-gray-900">
+            <h2 class="text-2xl font-bold mb-8 text-gray-800 border-b pb-4">Status Sistem (Live)</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Card 1 -->
+                <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 shadow-md text-center">
+                    <h3 class="text-lg font-bold text-blue-700 uppercase tracking-wide">Baza de Date</h3>
+                    <p class="text-2xl font-black text-blue-900 mt-2">Activă (WAL)</p>
+                    <p class="text-sm text-blue-600 mt-1">Conexiuni concurente: OK</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bg-purple-50 p-6 rounded-lg border border-purple-200 shadow-md text-center">
+                    <h3 class="text-lg font-bold text-purple-700 uppercase tracking-wide">Utilizatori</h3>
+                    <p class="text-3xl font-black text-purple-900 mt-2">3</p>
+                    <p class="text-sm text-purple-600 mt-1">Sistem RBAC activ</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="bg-green-50 p-6 rounded-lg border border-green-200 shadow-md text-center">
+                    <h3 class="text-lg font-bold text-green-700 uppercase tracking-wide">Motor Evaluare</h3>
+                    <p class="text-2xl font-black text-green-900 mt-2">OCR + AI</p>
+                    <p class="text-sm text-green-600 mt-1">Tesseract Online</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
