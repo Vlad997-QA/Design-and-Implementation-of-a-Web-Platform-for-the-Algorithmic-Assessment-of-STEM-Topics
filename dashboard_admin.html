@@ -20,7 +20,7 @@
     <main class="max-w-5xl mx-auto px-4">
         <div class="bg-white p-8 rounded-xl shadow-2xl border-t-4 border-gray-900">
             <h2 class="text-2xl font-bold mb-8 text-gray-800 border-b pb-4">Status Sistem (Live)</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <!-- Card 1 -->
                 <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 shadow-md text-center">
@@ -28,20 +28,28 @@
                     <p class="text-2xl font-black text-blue-900 mt-2">Activă (WAL)</p>
                     <p class="text-sm text-blue-600 mt-1">Conexiuni concurente: OK</p>
                 </div>
-                
-                <!-- Card 2 -->
+
+                <!-- Card 2: număr REAL de utilizatori, nu mai e hardcodat "3" -->
                 <div class="bg-purple-50 p-6 rounded-lg border border-purple-200 shadow-md text-center">
                     <h3 class="text-lg font-bold text-purple-700 uppercase tracking-wide">Utilizatori</h3>
-                    <p class="text-3xl font-black text-purple-900 mt-2">3</p>
+                    <p class="text-3xl font-black text-purple-900 mt-2">{{ numar_utilizatori }}</p>
                     <p class="text-sm text-purple-600 mt-1">Sistem RBAC activ</p>
                 </div>
-                
-                <!-- Card 3 -->
+
+                <!-- Card 3: status REAL al Tesseract, verificat efectiv, nu afirmat static -->
+                {% if tesseract_status %}
                 <div class="bg-green-50 p-6 rounded-lg border border-green-200 shadow-md text-center">
                     <h3 class="text-lg font-bold text-green-700 uppercase tracking-wide">Motor Evaluare</h3>
                     <p class="text-2xl font-black text-green-900 mt-2">OCR + AI</p>
                     <p class="text-sm text-green-600 mt-1">Tesseract Online</p>
                 </div>
+                {% else %}
+                <div class="bg-red-50 p-6 rounded-lg border border-red-200 shadow-md text-center">
+                    <h3 class="text-lg font-bold text-red-700 uppercase tracking-wide">Motor Evaluare</h3>
+                    <p class="text-2xl font-black text-red-900 mt-2">Doar Cod Python</p>
+                    <p class="text-sm text-red-600 mt-1">Tesseract Indisponibil - verifică TESSERACT_CMD</p>
+                </div>
+                {% endif %}
             </div>
         </div>
     </main>
