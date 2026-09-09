@@ -3,51 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panou Student</title>
+    <title>Panou Student - STEMGrade</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
-    <nav class="bg-white shadow p-4 mb-10">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold text-green-600">Platforma STEM - Evaluare</h1>
-            <div>
-                <span class="mr-4 text-gray-600">Student: <strong>{{ session['username'] }}</strong></span>
-                <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600">Ieșire</a>
-            </div>
-        </div>
-    </nav>
+<body class="bg-slate-50 font-sans min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto space-y-8">
 
-    <main class="max-w-4xl mx-auto px-4">
-        <div class="bg-white p-8 rounded-lg shadow-lg text-center border-t-4 border-green-500">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800">Încarcă Tema</h2>
-            
-            <!-- AICI AM ACTIVAT FORMULARUL DE UPLOAD -->
-            <form action="/student" method="POST" enctype="multipart/form-data" class="border-4 border-dashed border-green-300 p-10 rounded-xl bg-green-50">
-                <p class="text-xl text-gray-700 font-bold mb-2">Alege fișierul cu rezolvarea</p>
-                <p class="text-gray-500 mb-6">Suport: .py (Informatică) | .png / .jpg (Matematică OCR)</p>
-                
-                <input type="file" name="fisier_tema" required accept=".py, .png, .jpg" class="mb-6 block w-full max-w-md mx-auto text-gray-700 bg-white border border-gray-300 rounded p-2">
-                
-                <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-lg font-bold shadow hover:bg-green-700 transition">
-                    Trimite Rezolvarea pentru Corectare
+        <!-- Header Student -->
+        <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div>
+                <h1 class="text-2xl font-extrabold text-slate-900">Salut, {{ session['username'] }}! 👋</h1>
+                <p class="text-slate-500 mt-1">Alege o temă, încarcă rezolvarea și urmărește feedback-ul automat.</p>
+            </div>
+            <a href="/logout" class="text-sm font-medium text-red-600 hover:text-red-700 bg-red-50 px-4 py-2 rounded-lg transition">Ieșire</a>
+        </div>
+
+        {% if mesaj %}
+        <div class="p-4 bg-indigo-50 text-indigo-700 rounded-xl font-medium">
+            {{ mesaj }}
+        </div>
+        {% endif %}
+
+        {% if rezultat_evaluare %}
+        <div class="p-5 bg-amber-50 border border-amber-200 rounded-xl text-slate-800">
+            <h3 class="font-bold text-amber-900 mb-1">Rezultatul Corectării Automate:</h3>
+            <p class="text-2xl font-black text-amber-900">Nota: {{ rezultat_evaluare.nota }}/10 — {{ rezultat_evaluare.status }}</p>
+            <p class="font-mono text-sm text-slate-700 bg-white p-3 rounded-lg border border-amber-100 mt-2">{{ rezultat_evaluare.justificare }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Zona de Trimitere Teme -->
+        <div class="bg-white p-8 rounded-2xl shadow-xl shadow-indigo-100/50 border border-indigo-50">
+            <h2 class="text-lg font-bold text-slate-800 mb-4">Trimite o nouă rezolvare</h2>
+
+            {% if sarcini %}
+            <form action="/student" method="POST" enctype="multipart/form-data" class="space-y-5">
+
+                <!--
+                    Înainte, evaluarea se făcea mereu față de "ultima temă din baza
+                    de date" (ORDER BY id DESC LIMIT 1), indiferent ce alegea studentul.
+                    Acum studentul trebuie să aleagă explicit tema pentru care trimite.
+                -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Pentru care temă trimiți?</label>
+                    <select name="id_sarcina" required
+                            class="w-full border-slate-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2.5 border bg-white">
+                        {% for id, titlu, tip_evaluare in sarcini %}
+                        <option value="{{ id }}">{{ titlu }} ({{ tip_evaluare }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="relative group border-2 border-dashed border-indigo-200 rounded-xl p-10 text-center hover:border-indigo-500 hover:bg-indigo-50/30 transition-all duration-300">
+                    <div class="flex flex-col items-center justify-center space-y-3">
+                        <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        </div>
+                        <p class="text-slate-700 font-medium text-lg">Alege fișierul cu rezolvarea</p>
+                        <p class="text-sm text-slate-400">Fișiere acceptate: .py, .png, .jpg, .jpeg</p>
+                        <input type="file" name="fisier_tema" accept=".py,.png,.jpg,.jpeg" required
+                               class="text-sm text-slate-600 border border-slate-300 rounded-lg p-2 bg-white">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition shadow-md">
+                    Trimite spre corectare
                 </button>
             </form>
-
-            <!-- Mesaj de confirmare fișier -->
-            {% if mesaj %}
-            <div class="mt-6 p-4 bg-blue-100 text-blue-800 rounded font-bold border border-blue-300">
-                {{ mesaj }}
-            </div>
-            {% endif %}
-
-            <!-- AICI APARE NOTA FINALĂ! -->
-            {% if rezultat_evaluare %}
-            <div class="mt-6 p-8 bg-yellow-100 text-yellow-900 rounded-xl font-bold border-4 border-yellow-400 shadow-xl">
-                <h3 class="text-2xl mb-4">📋 Rezultatul Corectării Automate:</h3>
-                <p class="text-3xl text-red-600 bg-white p-4 rounded inline-block shadow">{{ rezultat_evaluare }}</p>
-            </div>
+            {% else %}
+            <p class="text-slate-500">Niciun profesor nu a adăugat încă o temă. Revino mai târziu.</p>
             {% endif %}
         </div>
-    </main>
+
+        <!-- Istoric evaluari (folosește tabela 'trimiteri', care înainte era definită dar nefolosită) -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <h2 class="text-lg font-bold text-slate-800 mb-4">Istoricul trimiterilor tale</h2>
+            {% if istoric %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="text-slate-500 uppercase text-xs border-b">
+                            <th class="py-2 pr-4">Temă</th>
+                            <th class="py-2 pr-4">Notă</th>
+                            <th class="py-2 pr-4">Status</th>
+                            <th class="py-2 pr-4">Detalii</th>
+                            <th class="py-2 pr-4">Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for titlu, nota, status, justificare, data in istoric %}
+                        <tr class="border-b border-slate-100">
+                            <td class="py-2 pr-4 font-medium text-slate-800">{{ titlu }}</td>
+                            <td class="py-2 pr-4 font-bold">{{ nota }}</td>
+                            <td class="py-2 pr-4">{{ status }}</td>
+                            <td class="py-2 pr-4 text-slate-500 truncate max-w-xs">{{ justificare }}</td>
+                            <td class="py-2 pr-4 text-slate-400">{{ data }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-slate-500">Nu ai trimis încă nicio rezolvare.</p>
+            {% endif %}
+        </div>
+
+    </div>
 </body>
 </html>
+
+   
