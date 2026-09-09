@@ -2,7 +2,7 @@
 Automated assessment of STEM assignments is a key pillar in the modernisation of the educational process. Although there are established software solutions on the market, most focus exclusively on programming or require complex cloud infrastructures.
 
 Web application (Flask) for the automated marking of assignments in computer science,
-mathematics and multiple-choice tests. It has three user roles: **admin**, **teacher** and
+mathematics, physics and multiple-choice tests. It has three user roles: **admin**, **teacher** and
 **student**.
 
 ## Features
@@ -12,7 +12,7 @@ mathematics and multiple-choice tests. It has three user roles: **admin**, **tea
 - **Multiple-choice** — handwritten or photographed answers are read via OCR and
   
 compared with the teacher’s marking scheme (approximate match, with partial marks).
-- **Mathematics** — handwritten or photographed expressions and equations are read
+- **Mathematics and Physics** — handwritten or photographed expressions and equations are read
   via OCR and symbolically verified using SymPy (mathematical equivalence, not
   literal text matching).
 - **Admin panel** — live status: database, users, availability
